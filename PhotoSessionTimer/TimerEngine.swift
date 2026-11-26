@@ -161,6 +161,48 @@ final class TimerEngine: ObservableObject {
         didSet { syncDisplayLoop() }
     }
 
+    // MARK: - Increment-quantized display values
+
+    /// Countdown time as it should be DISPLAYED, not the real time left.
+    /// When `increment` > 1, the overlay/menu only ever show multiples of
+    /// it — ticking internally every 50ms as usual (so completion and the
+    /// end sound still fire at the real zero), but visually holding at the
+    /// next-higher multiple until the real remaining time reaches it. e.g.
+    /// increment = 10 on a 3:00 countdown shows 3:00 the whole time the
+    /// real remaining is in (2:50, 3:00], then jumps to 2:50 once remaining
+    /// actually reaches 2:50, etc. — "ceiling to the increment".
+    var displayedCountdownRemaining: TimeInterval {
+        TimerEngine.quantizeCountdown(countdownRemaining, increment: increment)
+    }
+
+    /// Stopwatch counterpart of `displayedCountdownRemaining`: since
+    /// elapsed time counts UP, the display instead holds at the
+    /// next-LOWER multiple until the real elapsed time reaches it — e.g.
+    /// increment = 10 shows 0:00 while real elapsed is in [0, 10), then
+    /// jumps to 0:10, etc. — "floor to the increment".
+    var displayedStopwatchElapsed: TimeInterval {
+        TimerEngine.quantizeStopwatch(stopwatchElapsed, increment: increment)
+    }
+
+    /// Pure, pinned by tests: ceiling-quantizes `remaining` to the nearest
+    /// multiple of `increment` seconds. `increment` ≤ 1 is a no-op (every
+    /// whole second is its own "increment").
+    nonisolated static func quantizeCountdown(_ remaining: TimeInterval, increment: Int) -> TimeInterval {
+        guard increment > 1 else { return remaining }
+        let inc = Double(increment)
+        let clamped = max(0, remaining)
+        return (clamped / inc).rounded(.up) * inc
+    }
+
+    /// Pure, pinned by tests: floor-quantizes `elapsed` to the nearest
+    /// multiple of `increment` seconds. `increment` ≤ 1 is a no-op.
+    nonisolated static func quantizeStopwatch(_ elapsed: TimeInterval, increment: Int) -> TimeInterval {
+        guard increment > 1 else { return elapsed }
+        let inc = Double(increment)
+        let clamped = max(0, elapsed)
+        return (clamped / inc).rounded(.down) * inc
+    }
+
     // MARK: - Internal tracking
 
     private var countdownStartedAt: Date?

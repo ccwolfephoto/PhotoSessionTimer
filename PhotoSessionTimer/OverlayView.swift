@@ -55,7 +55,7 @@ struct OverlayView: View {
                 if engine.countdownVisible {
                     TimerPanel(
                         label: "Countdown",
-                        time: engine.countdownRemaining,
+                        time: engine.displayedCountdownRemaining,
                         isRunning: engine.countdownRunning,
                         tint: engine.countdownColor,
                         precision: engine.precision,
@@ -74,7 +74,7 @@ struct OverlayView: View {
                 if engine.stopwatchVisible {
                     TimerPanel(
                         label: "Stopwatch",
-                        time: engine.stopwatchElapsed,
+                        time: engine.displayedStopwatchElapsed,
                         isRunning: engine.stopwatchRunning,
                         tint: engine.stopwatchColor,
                         precision: engine.precision,
@@ -195,7 +195,7 @@ private struct EditableCountdownView: View {
                     }
                     .onAppear { fieldFocused = true }
             } else {
-                Text(TimeFormatter.format(engine.countdownRemaining, precision: engine.precision))
+                Text(TimeFormatter.format(engine.displayedCountdownRemaining, precision: engine.precision))
                     .font(.system(size: fontSize, weight: .medium, design: .monospaced))
                     .foregroundStyle(engine.countdownColor)
                     .monospacedDigit()

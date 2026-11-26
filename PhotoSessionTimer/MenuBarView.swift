@@ -98,7 +98,7 @@ struct MenuBarView: View {
         VStack(alignment: .leading, spacing: 4) {
             sectionHeader("Countdown")
             HStack {
-                Text(TimeFormatter.format(engine.countdownRemaining, precision: engine.precision))
+                Text(TimeFormatter.format(engine.displayedCountdownRemaining, precision: engine.precision))
                     .font(.system(.body, design: .monospaced))
                     .frame(width: 100, alignment: .leading)
                 Spacer()
@@ -144,7 +144,7 @@ struct MenuBarView: View {
         VStack(alignment: .leading, spacing: 4) {
             sectionHeader("Stopwatch")
             HStack {
-                Text(TimeFormatter.format(engine.stopwatchElapsed, precision: engine.precision))
+                Text(TimeFormatter.format(engine.displayedStopwatchElapsed, precision: engine.precision))
                     .font(.system(.body, design: .monospaced))
                     .frame(width: 100, alignment: .leading)
                 Spacer()
