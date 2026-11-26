@@ -6,6 +6,13 @@ struct MenuBarView: View {
     @EnvironmentObject var engine: TimerEngine
     @EnvironmentObject var overlay: OverlayController
 
+    /// Local text buffer for the "Increment" field. Kept separate from
+    /// `engine.increment` so the user can freely type/clear/backspace
+    /// without every keystroke needing to resolve to a valid integer —
+    /// `engine.increment` only updates once the text commits (Enter or
+    /// losing focus) and parses to an Int ≥ 1.
+    @State private var incrementText: String = ""
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             brandingHeader
@@ -41,6 +48,7 @@ struct MenuBarView: View {
             .padding(.vertical, 6)
         }
         .frame(width: 280)
+        .onAppear { incrementText = String(engine.increment) }
     }
 
     private func confirmResetToDefaults() {
@@ -230,6 +238,40 @@ struct MenuBarView: View {
                         .frame(width: 64, alignment: .trailing)
                         .monospacedDigit()
                 }
+            }
+            .padding(.horizontal, 12)
+            .padding(.bottom, 8)
+            .font(.caption)
+
+            HStack {
+                Text("Increment")
+                    .foregroundStyle(.secondary)
+                Spacer()
+                // Not yet wired to any behavior — accepted & persisted only,
+                // per the current feature scope. The TextField's Binding
+                // parses on every keystroke so a valid value is reflected
+                // immediately; invalid/empty text just leaves the last
+                // valid `engine.increment` unchanged until the user types
+                // something valid again.
+                TextField("", text: Binding(
+                    get: { incrementText },
+                    set: { newValue in
+                        incrementText = newValue
+                        if let parsed = Int(newValue), parsed >= 1 {
+                            engine.increment = parsed
+                        }
+                    }
+                ))
+                .textFieldStyle(.roundedBorder)
+                .multilineTextAlignment(.trailing)
+                .frame(width: 44)
+                .onSubmit {
+                    // On commit, snap the field back to the last valid
+                    // value in case the user left it empty/invalid.
+                    incrementText = String(engine.increment)
+                }
+                Text("sec")
+                    .foregroundStyle(.secondary)
             }
             .padding(.horizontal, 12)
             .padding(.bottom, 8)
@@ -477,4 +519,3 @@ struct MenuBarView: View {
             .padding(.bottom, 2)
     }
 }
-
