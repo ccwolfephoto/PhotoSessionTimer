@@ -65,7 +65,9 @@ struct OverlayView: View {
                             EditableCountdownView()
                                 .environmentObject(engine)
                                 .environmentObject(overlay)
-                        )
+                        ),
+                        showRunIndicator: engine.showRunIndicator,
+                        blinkRunIndicator: engine.blinkRunIndicator
                     )
                     .frame(maxHeight: .infinity)
                 }
@@ -78,7 +80,9 @@ struct OverlayView: View {
                         precision: engine.precision,
                         showCloseButton: !overlay.isLocked,
                         onClose: { hideStopwatch() },
-                        timeView: stopwatchTimeView
+                        timeView: stopwatchTimeView,
+                        showRunIndicator: engine.showRunIndicator,
+                        blinkRunIndicator: engine.blinkRunIndicator
                     )
                     .frame(maxHeight: .infinity)
                 }

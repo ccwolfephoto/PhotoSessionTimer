@@ -181,6 +181,13 @@ struct MenuBarView: View {
                 .padding(.horizontal, 12)
                 .padding(.bottom, 4)
 
+            Toggle("Show running indicator", isOn: $engine.showRunIndicator)
+                .padding(.horizontal, 12)
+            Toggle("Blink running indicator", isOn: $engine.blinkRunIndicator)
+                .padding(.horizontal, 12)
+                .padding(.bottom, 4)
+                .disabled(!engine.showRunIndicator)
+
             HStack {
                 Text("Opacity")
                     .foregroundStyle(.secondary)

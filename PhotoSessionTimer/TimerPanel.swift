@@ -9,6 +9,8 @@ struct TimerPanel: View {
     var showCloseButton: Bool = false
     var onClose: (() -> Void)? = nil
     var timeView: AnyView? = nil
+    var showRunIndicator: Bool = true
+    var blinkRunIndicator: Bool = true
 
     @Environment(\.timerFontSize) private var fontSize
 
@@ -81,24 +83,34 @@ struct TimerPanel: View {
     /// than a small badge. The glyph's own ascent/descent run a bit taller
     /// than monospaced digits at the same point size, so we dial the point
     /// size back slightly (0.85×) to land at roughly the same visual height.
-    /// While running, the ▶ blinks on 1s/off 1s — `TimelineView` drives
-    /// the redraw off wall-clock time (no `@State`/`Timer` bookkeeping needed),
-    /// so it stays in sync even if the view is recreated. The stopped ■ is
-    /// static — blinking only reads as meaningful on the "live" state.
+    /// While running, the ▶ blinks on 1s/off 1s (when `blinkRunIndicator` is
+    /// on) — `TimelineView` drives the redraw off wall-clock time (no
+    /// `@State`/`Timer` bookkeeping needed), so it stays in sync even if the
+    /// view is recreated. The stopped ■ is always static — blinking only
+    /// reads as meaningful on the "live" state. Hidden entirely when
+    /// `showRunIndicator` is off.
     private var runStateIndicator: some View {
         Group {
-            if isRunning {
-                TimelineView(.periodic(from: .now, by: 1.0)) { context in
-                    let secondTick = Int(context.date.timeIntervalSinceReferenceDate)
-                    Text("▶")
+            if showRunIndicator {
+                if isRunning {
+                    if blinkRunIndicator {
+                        TimelineView(.periodic(from: .now, by: 1.0)) { context in
+                            let secondTick = Int(context.date.timeIntervalSinceReferenceDate)
+                            Text("▶")
+                                .font(.system(size: fontSize * 0.85, weight: .medium))
+                                .foregroundStyle(tint)
+                                .opacity(secondTick.isMultiple(of: 2) ? 1 : 0)
+                        }
+                    } else {
+                        Text("▶")
+                            .font(.system(size: fontSize * 0.85, weight: .medium))
+                            .foregroundStyle(tint)
+                    }
+                } else {
+                    Text("■")
                         .font(.system(size: fontSize * 0.85, weight: .medium))
-                        .foregroundStyle(tint)
-                        .opacity(secondTick.isMultiple(of: 2) ? 1 : 0)
+                        .foregroundStyle(.secondary.opacity(0.5))
                 }
-            } else {
-                Text("■")
-                    .font(.system(size: fontSize * 0.85, weight: .medium))
-                    .foregroundStyle(.secondary.opacity(0.5))
             }
         }
         .accessibilityHidden(true)

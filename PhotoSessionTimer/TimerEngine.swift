@@ -44,6 +44,22 @@ final class TimerEngine: ObservableObject {
         didSet { saveSettings() }
     }
 
+    // MARK: - User-configurable state (v1.3)
+
+    /// Whether the overlay shows the large ▶/■ running-state glyph next to
+    /// each timer's digits at all. Off by default? No — defaults to on
+    /// (true), matching the feature's initial always-on rollout.
+    @Published var showRunIndicator: Bool {
+        didSet { saveSettings() }
+    }
+    /// Whether the ▶ glyph blinks (on 1s/off 1s) while a timer is running.
+    /// Meaningless when `showRunIndicator` is false, but kept independently
+    /// persisted so toggling Show back on restores the user's prior Blink
+    /// preference instead of resetting it.
+    @Published var blinkRunIndicator: Bool {
+        didSet { saveSettings() }
+    }
+
     // MARK: - Custom user-picked sound (v1.1)
 
     /// Display name of the user-picked custom sound file (e.g. "beep.wav").
@@ -198,6 +214,8 @@ final class TimerEngine: ObservableObject {
         self.countdownEndSound = (dict["countdownEndSound"] as? String) ?? TimerEngine.defaultCountdownEndSound
         self.delaySeconds = max(0, min(10, (dict["delaySeconds"] as? Int) ?? 0))
         self.delayTickEnabled = (dict["delayTickEnabled"] as? Bool) ?? false
+        self.showRunIndicator = (dict["showRunIndicator"] as? Bool) ?? true
+        self.blinkRunIndicator = (dict["blinkRunIndicator"] as? Bool) ?? true
         self.customSoundFileName = dict["customSoundFileName"] as? String
         self.customSoundBookmark = dict["customSoundBookmark"] as? Data
         self.soundPlayCount = max(1, (dict["soundPlayCount"] as? Int) ?? TimerEngine.defaultSoundPlayCount)
@@ -391,6 +409,8 @@ final class TimerEngine: ObservableObject {
         countdownEndSound = TimerEngine.defaultCountdownEndSound
         delaySeconds = 0
         delayTickEnabled = false
+        showRunIndicator = true
+        blinkRunIndicator = true
         customSoundFileName = nil
         customSoundBookmark = nil
         soundPlayCount = TimerEngine.defaultSoundPlayCount
@@ -594,6 +614,8 @@ final class TimerEngine: ObservableObject {
             "delaySeconds": delaySeconds,
             "delayTickEnabled": delayTickEnabled,
             "soundPlayCount": soundPlayCount,
+            "showRunIndicator": showRunIndicator,
+            "blinkRunIndicator": blinkRunIndicator,
         ]
         // Custom-sound entries are conditional — when nil, omit the keys
         // entirely. The whole dict is replaced on each set, so cleared
