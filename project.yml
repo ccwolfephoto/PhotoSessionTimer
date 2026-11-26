@@ -1,7 +1,7 @@
 name: TimeStack
 
 options:
-  bundleIdPrefix: com.planbecreative
+  bundleIdPrefix: com.ccwolfephoto
   deploymentTarget:
     macOS: "13.0"
   createIntermediateGroups: true
@@ -13,7 +13,7 @@ options:
 
 settings:
   base:
-    DEVELOPMENT_TEAM: X22WKZG6P4
+    DEVELOPMENT_TEAM: T2AMLBZ6S6
     SWIFT_VERSION: "5.0"
     MACOSX_DEPLOYMENT_TARGET: "13.0"
     ENABLE_USER_SCRIPT_SANDBOXING: YES
@@ -78,7 +78,7 @@ targets:
       - path: TimeStack/TimerEngine.swift
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.planbecreative.TimeStackTests
+        PRODUCT_BUNDLE_IDENTIFIER: com.ccwolfephoto.TimeStackTests
         # Swift Testing / XCTest dylibs are built for 14.0; tests only, the app stays 13.0.
         MACOSX_DEPLOYMENT_TARGET: "14.0"
         GENERATE_INFOPLIST_FILE: YES
