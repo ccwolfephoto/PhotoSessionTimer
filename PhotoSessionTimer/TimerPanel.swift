@@ -41,23 +41,51 @@ struct TimerPanel: View {
                     .help("Hide \(label.lowercased())")
                 }
             }
-            if let timeView {
-                timeView
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                Text(TimeFormatter.format(time, precision: precision))
-                    .font(.system(size: fontSize, weight: .medium, design: .monospaced))
-                    .foregroundStyle(tint)
-                    .monospacedDigit()
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.4)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            ZStack(alignment: .trailing) {
+                Group {
+                    if let timeView {
+                        timeView
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        Text(TimeFormatter.format(time, precision: precision))
+                            .font(.system(size: fontSize, weight: .medium, design: .monospaced))
+                            .foregroundStyle(tint)
+                            .monospacedDigit()
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.4)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    }
+                }
+                // Reserves room on the right so the now digit-height indicator
+                // doesn't sit on top of the time text — shifts the time's
+                // centered column left by roughly the indicator's own width.
+                .padding(.trailing, fontSize * 0.85)
+                runStateIndicator
+                    .padding(.trailing, 4)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 2)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(adaptiveCardBackground, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+    }
+
+    /// Large play/pause-style glyph shown to the right of the time, giving an
+    /// at-a-glance "is this ticking?" cue without reading the digits — handy
+    /// when the overlay is glimpsed peripherally during a shoot. "▶" (running)
+    /// and "■" (paused/stopped) are plain characters rather than SF Symbols so
+    /// they read clearly at a glance and scale simply with the font system.
+    /// Matches the timer numerals' height — sized directly off `fontSize`
+    /// (not clamped down) so it reads as a companion to the digits rather
+    /// than a small badge. The glyph's own ascent/descent run a bit taller
+    /// than monospaced digits at the same point size, so we dial the point
+    /// size back slightly (0.85×) to land at roughly the same visual height.
+    private var runStateIndicator: some View {
+        Text(isRunning ? "▶" : "■")
+            .font(.system(size: fontSize * 0.85, weight: .medium))
+            .foregroundStyle(isRunning ? tint : .secondary.opacity(0.5))
+            .accessibilityHidden(true)
     }
 
     /// Card background flips between a light and dark tint based on the text
