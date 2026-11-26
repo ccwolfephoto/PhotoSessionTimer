@@ -1,10 +1,10 @@
-# TimeStack
+# PhotoSessionTimer
 
 Free, always-on-top transparent overlay timers for macOS. A stacked **countdown** and **stopwatch** that float above whatever app you're focused on — speedruns, focus sessions, time-boxed builds.
 
 ## Status
 
-**v1.0 — full first release**, submitted to the Mac App Store 2026-05-27 and published as a notarized binary on GitHub Releases the same day. All features listed below ship in v1.0; future versions accumulate from here.
+PhotoSessionTimer is a renamed fork of [TimeStack](https://github.com/planBe/TimeStack). The upstream README records its **v1.0** Mac App Store submission and notarized GitHub release on 2026-05-27; those distribution claims refer to TimeStack, not PhotoSessionTimer.
 
 ## Features
 
@@ -36,29 +36,31 @@ The Xcode project is generated from `project.yml` via XcodeGen. From the repo ro
 
 ```bash
 xcodegen generate
-open TimeStack.xcodeproj
+open PhotoSessionTimer.xcodeproj
 ```
 
 Then ⌘R to build and run.
 
 ## How it works
 
-The overlay is a borderless `NSPanel` at `.statusBar` level (always on top) hosting a SwiftUI view via `NSHostingView`. When locked, `ignoresMouseEvents = true` makes the window click-through. A separate small companion `NSPanel` at the top-left stays clickable regardless, so you can lock or unlock without leaving the overlay — no global hotkey needed (TimeStack stays sandbox-clean by avoiding the Accessibility-permission flow that global hotkeys require on Mac).
+The overlay is a borderless `NSPanel` at `.statusBar` level (always on top) hosting a SwiftUI view via `NSHostingView`. When locked, `ignoresMouseEvents = true` makes the window click-through. A separate small companion `NSPanel` at the top-left stays clickable regardless, so you can lock or unlock without leaving the overlay — no global hotkey needed (PhotoSessionTimer stays sandbox-clean by avoiding the Accessibility-permission flow that global hotkeys require on Mac).
 
 Font sizes scale with the window via a SwiftUI `GeometryReader` + custom `Environment` value (`timerFontSize`) — at small windows the timer text floors at 28pt for legibility; at large windows it grows to fill the available space. The card aspect ratio locks dynamically to 8:5 (both timers visible), 8:3 (one timer), or 8:3 (neither — empty state).
 
 Sound playback uses `NSSound` with a delegate-replay model: when you pick "Play 3×", the engine sets `NSSound.delegate` to a `SoundReplayDelegate` that re-calls `play()` after each `sound:didFinishPlaying:` callback until the count is exhausted. Custom user-picked audio files are persisted via Security-Scoped Bookmarks (the sandbox-permitted mechanism for re-accessing user-chosen files across launches).
 
-Settings persist in `UserDefaults` under `TimeStack.settings.v2`. Multi-monitor robust — if a saved window frame is off-screen at launch (monitor unplugged), TimeStack falls back to centering on the main screen.
+Settings persist in `UserDefaults` under `PhotoSessionTimer.settings.v2`. Multi-monitor robust — if a saved window frame is off-screen at launch (monitor unplugged), PhotoSessionTimer falls back to centering on the main screen.
+
+PhotoSessionTimer uses the bundle identifier `com.ccwolfephoto.PhotoSessionTimer` and a separate sandbox container. It starts with fresh settings and custom sound selections; existing TimeStack preferences and files are left untouched.
 
 ## Roadmap
 
-- [x] **v1.0** — initial release. Full feature set above: overlay countdown + stopwatch, click-through lock with always-clickable lock corner, NSColorPanel per-timer colors, GeometryReader-driven font scaling, precision picker, click-to-edit countdown numbers, optional 3-2-1 delay-start with audio tick, both-at-once controls with Pause/Resume Both consolidation, bundled Alarm + Siren sounds plus 14 system sounds plus user-picked custom audio file, play-N-times count semantic, multi-monitor robust persistence
+- [x] **Upstream v1.0** — initial TimeStack release. Full feature set above: overlay countdown + stopwatch, click-through lock with always-clickable lock corner, NSColorPanel per-timer colors, GeometryReader-driven font scaling, precision picker, click-to-edit countdown numbers, optional 3-2-1 delay-start with audio tick, both-at-once controls with Pause/Resume Both consolidation, bundled Alarm + Siren sounds plus 14 system sounds plus user-picked custom audio file, play-N-times count semantic, multi-monitor robust persistence
 - [ ] **v1.1+** — future candidates: in-app Credits surface, optional custom-sound trimming, additional bundled alarm options, configurable global hotkey to show/hide the overlay
 
 ## Privacy
 
-TimeStack collects no data. Everything runs on your Mac; nothing is sent anywhere. See [PRIVACY.md](PRIVACY.md) for the full policy.
+PhotoSessionTimer collects no data. Everything runs on your Mac; nothing is sent anywhere. See [PRIVACY.md](PRIVACY.md) for the full policy.
 
 ## License
 
@@ -75,7 +77,7 @@ Issues and PRs welcome. The codebase is intentionally compact — around 1800 li
 
 ## About
 
-Part of the **Stack** family of free, open-source macOS utilities. See also:
+Originally part of the **Stack** family of free, open-source macOS utilities as TimeStack. See also:
 
 - [ClipStack](https://github.com/planBe/ClipStack) — menu bar clipboard history
 

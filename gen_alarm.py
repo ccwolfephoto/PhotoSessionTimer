@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Regenerates TimeStack/Resources/Alarm.m4a — the bundled alarm sound.
+Regenerates PhotoSessionTimer/Resources/Alarm.m4a — the bundled alarm sound.
 
 Two-tone "bee-doo" alternating A5 (880 Hz) / E5 (660 Hz), 1.0s loop with
 450ms silence tail for clean looping. Soft 20ms attack/release envelope.
@@ -9,8 +9,8 @@ Sine + 15% 3rd-harmonic for bell-like warmth vs pure sine.
 Usage:
     python3 gen_alarm.py
     afconvert -d aac -f m4af -b 64000 \
-        TimeStack/Resources/Alarm.wav TimeStack/Resources/Alarm.m4a
-    rm TimeStack/Resources/Alarm.wav
+        PhotoSessionTimer/Resources/Alarm.wav PhotoSessionTimer/Resources/Alarm.m4a
+    rm PhotoSessionTimer/Resources/Alarm.wav
 
 Per DECISIONS D-030. Tweak parameters here, regenerate, listen-test.
 """
@@ -63,7 +63,7 @@ def main():
         samples.append(int(sample * VOLUME * 32767))
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    out_path = os.path.join(script_dir, "TimeStack", "Resources", "Alarm.wav")
+    out_path = os.path.join(script_dir, "PhotoSessionTimer", "Resources", "Alarm.wav")
     with wave.open(out_path, "wb") as w:
         w.setnchannels(1)
         w.setsampwidth(2)

@@ -5,6 +5,7 @@
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES"
+      buildArchitectures = "Automatic"
       runPostActionsOnFailure = "NO">
       <BuildActionEntries>
          <BuildActionEntry
@@ -15,10 +16,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3147583E2EDBEA3FC5B65B3A"
-               BuildableName = "TimeStack.app"
-               BlueprintName = "TimeStack"
-               ReferencedContainer = "container:TimeStack.xcodeproj">
+               BlueprintIdentifier = "6BD3570ECEAFE505265F5E15"
+               BuildableName = "PhotoSessionTimer.app"
+               BlueprintName = "PhotoSessionTimer"
+               ReferencedContainer = "container:PhotoSessionTimer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +33,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3147583E2EDBEA3FC5B65B3A"
-            BuildableName = "TimeStack.app"
-            BlueprintName = "TimeStack"
-            ReferencedContainer = "container:TimeStack.xcodeproj">
+            BlueprintIdentifier = "6BD3570ECEAFE505265F5E15"
+            BuildableName = "PhotoSessionTimer.app"
+            BlueprintName = "PhotoSessionTimer"
+            ReferencedContainer = "container:PhotoSessionTimer.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -44,10 +45,10 @@
             parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "02DCBA4C80C3AD4C5FF63BF8"
-               BuildableName = "TimeStackTests.xctest"
-               BlueprintName = "TimeStackTests"
-               ReferencedContainer = "container:TimeStack.xcodeproj">
+               BlueprintIdentifier = "926E358663EABF5664E50A2E"
+               BuildableName = "PhotoSessionTimerTests.xctest"
+               BlueprintName = "PhotoSessionTimerTests"
+               ReferencedContainer = "container:PhotoSessionTimer.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -68,10 +69,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3147583E2EDBEA3FC5B65B3A"
-            BuildableName = "TimeStack.app"
-            BlueprintName = "TimeStack"
-            ReferencedContainer = "container:TimeStack.xcodeproj">
+            BlueprintIdentifier = "6BD3570ECEAFE505265F5E15"
+            BuildableName = "PhotoSessionTimer.app"
+            BlueprintName = "PhotoSessionTimer"
+            ReferencedContainer = "container:PhotoSessionTimer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -87,10 +88,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3147583E2EDBEA3FC5B65B3A"
-            BuildableName = "TimeStack.app"
-            BlueprintName = "TimeStack"
-            ReferencedContainer = "container:TimeStack.xcodeproj">
+            BlueprintIdentifier = "6BD3570ECEAFE505265F5E15"
+            BuildableName = "PhotoSessionTimer.app"
+            BlueprintName = "PhotoSessionTimer"
+            ReferencedContainer = "container:PhotoSessionTimer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>

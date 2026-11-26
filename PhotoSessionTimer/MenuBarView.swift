@@ -33,7 +33,7 @@ struct MenuBarView: View {
 
             Divider()
 
-            Button("Quit TimeStack") {
+            Button("Quit PhotoSessionTimer") {
                 NSApplication.shared.terminate(nil)
             }
             .keyboardShortcut("q")
@@ -46,7 +46,7 @@ struct MenuBarView: View {
     private func confirmResetToDefaults() {
         NSApp.activate(ignoringOtherApps: true)
         let alert = NSAlert()
-        alert.messageText = "Reset TimeStack to defaults?"
+        alert.messageText = "Reset PhotoSessionTimer to defaults?"
         alert.informativeText = "Your custom colors, window position and size, transparency, sound choice, delay-start, and other preferences will be restored to factory defaults. This action cannot be undone."
         alert.alertStyle = .warning
         alert.addButton(withTitle: "Reset")
@@ -70,7 +70,7 @@ struct MenuBarView: View {
             Image(systemName: "stopwatch")
                 .font(.system(size: 14, weight: .medium))
                 .foregroundStyle(.secondary)
-            Text("timeStack")
+            Text("PhotoSessionTimer")
                 .font(.system(.body, design: .rounded).weight(.semibold))
                 .foregroundStyle(.primary)
             Spacer()

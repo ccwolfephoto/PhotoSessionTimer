@@ -1,7 +1,7 @@
-name: TimeStack
+name: PhotoSessionTimer
 
 options:
-  bundleIdPrefix: com.planbecreative
+  bundleIdPrefix: com.ccwolfephoto
   deploymentTarget:
     macOS: "13.0"
   createIntermediateGroups: true
@@ -13,7 +13,7 @@ options:
 
 settings:
   base:
-    DEVELOPMENT_TEAM: X22WKZG6P4
+    DEVELOPMENT_TEAM: T2AMLBZ6S6
     SWIFT_VERSION: "5.0"
     MACOSX_DEPLOYMENT_TARGET: "13.0"
     ENABLE_USER_SCRIPT_SANDBOXING: YES
@@ -26,21 +26,21 @@ settings:
     ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
 
 targets:
-  TimeStack:
+  PhotoSessionTimer:
     type: application
     platform: macOS
     sources:
-      - path: TimeStack
+      - path: PhotoSessionTimer
         excludes:
           - "*.entitlements"
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.planbecreative.TimeStack
+        PRODUCT_BUNDLE_IDENTIFIER: com.ccwolfephoto.PhotoSessionTimer
         PRODUCT_NAME: "$(TARGET_NAME)"
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "10"
         CODE_SIGN_STYLE: Automatic
-        CODE_SIGN_ENTITLEMENTS: TimeStack/TimeStack.entitlements
+        CODE_SIGN_ENTITLEMENTS: PhotoSessionTimer/PhotoSessionTimer.entitlements
         DEAD_CODE_STRIPPING: YES
         ENABLE_APP_SANDBOX: YES
         ENABLE_HARDENED_RUNTIME: YES
@@ -48,7 +48,7 @@ targets:
         ENABLE_USER_SELECTED_FILES: readonly
         REGISTER_APP_GROUPS: YES
         GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: timeStack
+        INFOPLIST_KEY_CFBundleDisplayName: PhotoSessionTimer
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
         INFOPLIST_KEY_LSUIElement: YES
         INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 Michael Wild"
@@ -69,16 +69,16 @@ targets:
   # Logic tests. The pure model files are compiled straight into the test
   # bundle (no TEST_HOST), so `xcodebuild test` never launches the app —
   # no menu-bar item, no global hotkey, no read/write of real user data.
-  TimeStackTests:
+  PhotoSessionTimerTests:
     type: bundle.unit-test
     platform: macOS
     sources:
-      - path: TimeStackTests
-      - path: TimeStack/TimeFormatter.swift
-      - path: TimeStack/TimerEngine.swift
+      - path: PhotoSessionTimerTests
+      - path: PhotoSessionTimer/TimeFormatter.swift
+      - path: PhotoSessionTimer/TimerEngine.swift
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.planbecreative.TimeStackTests
+        PRODUCT_BUNDLE_IDENTIFIER: com.ccwolfephoto.PhotoSessionTimerTests
         # Swift Testing / XCTest dylibs are built for 14.0; tests only, the app stays 13.0.
         MACOSX_DEPLOYMENT_TARGET: "14.0"
         GENERATE_INFOPLIST_FILE: YES
@@ -88,16 +88,16 @@ targets:
         SDKROOT: macosx
 
 schemes:
-  TimeStack:
+  PhotoSessionTimer:
     build:
       targets:
-        TimeStack: all
+        PhotoSessionTimer: all
     run:
       config: Debug
     test:
       config: Debug
       targets:
-        - TimeStackTests
+        - PhotoSessionTimerTests
     profile:
       config: Release
     analyze:

@@ -17,7 +17,7 @@ struct TimerEngineTests {
     /// One suite per test function, emptied before use (a fresh UUID per run
     /// would leave a new plist in ~/Library/Preferences every run).
     private func makeDefaults(_ test: String) -> UserDefaults {
-        let name = "TimeStackTests.\(test.prefix { $0 != "(" })"
+        let name = "PhotoSessionTimerTests.\(test.prefix { $0 != "(" })"
         let d = UserDefaults(suiteName: name)!
         d.removePersistentDomain(forName: name)
         return d
@@ -258,7 +258,7 @@ struct TimerEngineTests {
         let (engine, _, d) = makeEngine()
         engine.precision = 2
         engine.countdownTarget = 300
-        let saved = d.dictionary(forKey: "TimeStack.settings.v2")
+        let saved = d.dictionary(forKey: "PhotoSessionTimer.settings.v2")
         #expect(saved?["precision"] as? Int == 2)
         #expect(saved?["countdownTarget"] as? TimeInterval == 300)
 
@@ -272,18 +272,35 @@ struct TimerEngineTests {
     func legacySettings() {
         let d = makeDefaults(#function)
         let v1: [String: Any] = ["countdownTarget": 90.0, "stopwatchVisible": false]
-        d.set(v1, forKey: "TimeStack.settings.v1")
+        d.set(v1, forKey: "PhotoSessionTimer.settings.v1")
         let engine = TimerEngine(defaults: d)
         #expect(engine.countdownTarget == 90)
         #expect(engine.countdownRemaining == 90)
         #expect(!engine.stopwatchVisible)
     }
 
+    @Test("Old TimeStack settings are ignored and left untouched")
+    func oldAppSettingsAreIsolated() {
+        let d = makeDefaults(#function)
+        d.set(["countdownTarget": 90.0], forKey: "TimeStack.settings.v1")
+        d.set(["countdownTarget": 120.0], forKey: "TimeStack.settings.v2")
+        let engine = TimerEngine(defaults: d)
+        #expect(engine.countdownTarget == 180)
+
+        engine.countdownTarget = 300
+        #expect(d.dictionary(forKey: "PhotoSessionTimer.settings.v2")?["countdownTarget"] as? Double == 300)
+
+        engine.resetToDefaults()
+        #expect(d.dictionary(forKey: "TimeStack.settings.v1")?["countdownTarget"] as? Double == 90)
+        #expect(d.dictionary(forKey: "TimeStack.settings.v2")?["countdownTarget"] as? Double == 120)
+        #expect(d.dictionary(forKey: "PhotoSessionTimer.settings.v2")?["countdownTarget"] as? Double == 180)
+    }
+
     @Test("Reset to defaults stops the timers and rewrites the suite with factory values")
     func resetToDefaults() {
         let (engine, clock, d) = makeEngine()
         engine.precision = 2
-        d.set(["countdownTarget": 5.0], forKey: "TimeStack.settings.v1")
+        d.set(["countdownTarget": 5.0], forKey: "PhotoSessionTimer.settings.v1")
         engine.startBoth()
         clock.advance(4)
         engine.tick()
@@ -293,7 +310,7 @@ struct TimerEngineTests {
         #expect(engine.stopwatchElapsed == 0)
         #expect(engine.countdownRemaining == 180)
         #expect(engine.precision == 0)
-        #expect(d.dictionary(forKey: "TimeStack.settings.v1") == nil)
-        #expect(d.dictionary(forKey: "TimeStack.settings.v2")?["precision"] as? Int == 0)
+        #expect(d.dictionary(forKey: "PhotoSessionTimer.settings.v1") == nil)
+        #expect(d.dictionary(forKey: "PhotoSessionTimer.settings.v2")?["precision"] as? Int == 0)
     }
 }

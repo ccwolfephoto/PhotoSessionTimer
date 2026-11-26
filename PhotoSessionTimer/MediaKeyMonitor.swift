@@ -1,6 +1,6 @@
 import MediaPlayer
 
-/// Claims the system's "Now Playing" media-key routing so TimeStack
+/// Claims the system's "Now Playing" media-key routing so PhotoSessionTimer
 /// receives the hardware Play/Pause, "⏮ / <<" back-track, and "⏭ / >>"
 /// next-track keys, even while backgrounded.
 ///
@@ -9,7 +9,7 @@ import MediaPlayer
 /// "Now Playing" app — modern macOS routes hardware media keys through
 /// `MPRemoteCommandCenter` / `MPNowPlayingInfoCenter`, not a system-wide
 /// NSEvent broadcast. Claiming a perpetual "playing" Now Playing entry
-/// (even though TimeStack plays no actual media) is what makes macOS treat
+/// (even though PhotoSessionTimer plays no actual media) is what makes macOS treat
 /// it as eligible to receive those commands. No special entitlement is
 /// needed — just linking the MediaPlayer framework, which Xcode does
 /// automatically from the `import`.
@@ -23,7 +23,7 @@ final class MediaKeyMonitor {
         onNext: @escaping () -> Void
     ) {
         MPNowPlayingInfoCenter.default().nowPlayingInfo = [
-            MPMediaItemPropertyTitle: "TimeStack",
+            MPMediaItemPropertyTitle: "PhotoSessionTimer",
         ]
         MPNowPlayingInfoCenter.default().playbackState = .playing
 
