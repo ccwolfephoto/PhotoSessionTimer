@@ -65,6 +65,35 @@ struct TimerEngineTests {
         ) == expected)
     }
 
+    @Test("Countdown display holds at the next-higher multiple of the increment until real time reaches it", arguments: [
+        // (remaining, increment, expectedDisplayed)
+        (180.0, 1, 180.0),    // increment 1 (default/off): no quantization
+        (180.0, 10, 180.0),   // exactly on a boundary
+        (179.9, 10, 180.0),   // just below: still shows the higher multiple
+        (170.1, 10, 180.0),   // still in (170, 180]
+        (170.0, 10, 170.0),   // reached the boundary: jumps down
+        (165.0, 10, 170.0),
+        (160.0, 10, 160.0),
+        (0.0, 10, 0.0),
+        (-5.0, 10, 0.0),      // clamped before quantizing
+    ])
+    func quantizeCountdownDisplay(remaining: Double, increment: Int, expected: Double) {
+        #expect(TimerEngine.quantizeCountdown(remaining, increment: increment) == expected)
+    }
+
+    @Test("Stopwatch display holds at the next-lower multiple of the increment until real time reaches it", arguments: [
+        // (elapsed, increment, expectedDisplayed)
+        (5.0, 1, 5.0),       // increment 1 (default/off): no quantization
+        (0.0, 10, 0.0),
+        (9.9, 10, 0.0),      // still below the next boundary
+        (10.0, 10, 10.0),    // reached it: jumps up
+        (15.0, 10, 10.0),
+        (20.0, 10, 20.0),
+    ])
+    func quantizeStopwatchDisplay(elapsed: Double, increment: Int, expected: Double) {
+        #expect(TimerEngine.quantizeStopwatch(elapsed, increment: increment) == expected)
+    }
+
     // MARK: - The engine against the clock
 
     @Test("Countdown runs, holds while paused, and resumes from where it stopped")
