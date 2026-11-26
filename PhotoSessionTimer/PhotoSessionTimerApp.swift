@@ -2,11 +2,11 @@ import Combine
 import SwiftUI
 
 @main
-struct TimeStackApp: App {
+struct PhotoSessionTimerApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
-        MenuBarExtra("TimeStack", systemImage: "stopwatch") {
+        MenuBarExtra("PhotoSessionTimer", systemImage: "stopwatch") {
             MenuBarView()
                 .environmentObject(appDelegate.engine)
                 .environmentObject(appDelegate.overlay)

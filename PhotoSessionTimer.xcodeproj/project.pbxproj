@@ -1,0 +1,503 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		33FB75C74DC08FD60516B280 /* TimerPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC251BB2F2A0BCF26383790 /* TimerPanel.swift */; };
+		4F19FC407270AF64BAAADDE7 /* OverlayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D242FA1F2B1636FCB77C5F /* OverlayController.swift */; };
+		58201FEFBC74086B6ED397F5 /* ColorWell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B5BF6EE4D98ADCD9AE2C78 /* ColorWell.swift */; };
+		5D5A9F732891646C5999FF30 /* TimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64AF7C5EFBD841452520C15 /* TimerEngine.swift */; };
+		69F3A5C37351598BF0415790 /* PhotoSessionTimerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7CE489921C03D28ED6B1B /* PhotoSessionTimerApp.swift */; };
+		7BED9674E8FBB6E836EE609C /* TimerEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200D272795ED7483DCE0D4E4 /* TimerEngineTests.swift */; };
+		7DB0BFD2C811DE062CD4EA97 /* TimeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2A63ACE69465F823EF9AA6 /* TimeFormatter.swift */; };
+		8C74D744BE14E750BCE8B334 /* MediaKeyMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E5943861E3A325E8E76F99 /* MediaKeyMonitor.swift */; };
+		9C7B8C1F25BD127C9FBBD78D /* TimeFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20C15DCBD27A3C605A70133 /* TimeFormatterTests.swift */; };
+		AAD928073D7860F4316027F4 /* TimeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2A63ACE69465F823EF9AA6 /* TimeFormatter.swift */; };
+		AEF852E63B16D00B58530890 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B520B060C50350B0A068B /* MenuBarView.swift */; };
+		BE3063727A5DDD0FCE1E99F6 /* TimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64AF7C5EFBD841452520C15 /* TimerEngine.swift */; };
+		BE6ED699B84C224C8BBC38BA /* Siren.m4a in Resources */ = {isa = PBXBuildFile; fileRef = EA45CB08DEFAB43E3ADEE079 /* Siren.m4a */; };
+		D0065467CEC21EB193700412 /* Alarm.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8C92C7D6D914C9F56C02BCE1 /* Alarm.m4a */; };
+		D471F76951458EA5C6A7D742 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A8737352F6B112425377ABD /* Assets.xcassets */; };
+		FFD17A50D828D921544D76C2 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B4A8085C2390E155783784 /* OverlayView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1BC251BB2F2A0BCF26383790 /* TimerPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPanel.swift; sourceTree = "<group>"; };
+		1C3D908185CF4F16744E5236 /* PhotoSessionTimerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhotoSessionTimerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		200D272795ED7483DCE0D4E4 /* TimerEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngineTests.swift; sourceTree = "<group>"; };
+		339AB8913485680108E98B5E /* PhotoSessionTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoSessionTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F2A63ACE69465F823EF9AA6 /* TimeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFormatter.swift; sourceTree = "<group>"; };
+		56D7CE489921C03D28ED6B1B /* PhotoSessionTimerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSessionTimerApp.swift; sourceTree = "<group>"; };
+		88B4A8085C2390E155783784 /* OverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
+		8A8737352F6B112425377ABD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8C92C7D6D914C9F56C02BCE1 /* Alarm.m4a */ = {isa = PBXFileReference; path = Alarm.m4a; sourceTree = "<group>"; };
+		AA2B520B060C50350B0A068B /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		B0D242FA1F2B1636FCB77C5F /* OverlayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayController.swift; sourceTree = "<group>"; };
+		C64AF7C5EFBD841452520C15 /* TimerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngine.swift; sourceTree = "<group>"; };
+		D20C15DCBD27A3C605A70133 /* TimeFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFormatterTests.swift; sourceTree = "<group>"; };
+		D3E5943861E3A325E8E76F99 /* MediaKeyMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaKeyMonitor.swift; sourceTree = "<group>"; };
+		E1B5BF6EE4D98ADCD9AE2C78 /* ColorWell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWell.swift; sourceTree = "<group>"; };
+		EA45CB08DEFAB43E3ADEE079 /* Siren.m4a */ = {isa = PBXFileReference; path = Siren.m4a; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		17F964B4B5EA9E23EE85844A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				339AB8913485680108E98B5E /* PhotoSessionTimer.app */,
+				1C3D908185CF4F16744E5236 /* PhotoSessionTimerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		880DC71C5404E1A204E455F4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8C92C7D6D914C9F56C02BCE1 /* Alarm.m4a */,
+				EA45CB08DEFAB43E3ADEE079 /* Siren.m4a */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		903EE990150F0BD29CA6F471 /* PhotoSessionTimer */ = {
+			isa = PBXGroup;
+			children = (
+				880DC71C5404E1A204E455F4 /* Resources */,
+				8A8737352F6B112425377ABD /* Assets.xcassets */,
+				E1B5BF6EE4D98ADCD9AE2C78 /* ColorWell.swift */,
+				D3E5943861E3A325E8E76F99 /* MediaKeyMonitor.swift */,
+				AA2B520B060C50350B0A068B /* MenuBarView.swift */,
+				B0D242FA1F2B1636FCB77C5F /* OverlayController.swift */,
+				88B4A8085C2390E155783784 /* OverlayView.swift */,
+				56D7CE489921C03D28ED6B1B /* PhotoSessionTimerApp.swift */,
+				3F2A63ACE69465F823EF9AA6 /* TimeFormatter.swift */,
+				C64AF7C5EFBD841452520C15 /* TimerEngine.swift */,
+				1BC251BB2F2A0BCF26383790 /* TimerPanel.swift */,
+			);
+			path = PhotoSessionTimer;
+			sourceTree = "<group>";
+		};
+		A0315977BA8F748A00E5ACB3 = {
+			isa = PBXGroup;
+			children = (
+				903EE990150F0BD29CA6F471 /* PhotoSessionTimer */,
+				E86D883C3FD93315D2C19AD1 /* PhotoSessionTimerTests */,
+				17F964B4B5EA9E23EE85844A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E86D883C3FD93315D2C19AD1 /* PhotoSessionTimerTests */ = {
+			isa = PBXGroup;
+			children = (
+				D20C15DCBD27A3C605A70133 /* TimeFormatterTests.swift */,
+				200D272795ED7483DCE0D4E4 /* TimerEngineTests.swift */,
+			);
+			path = PhotoSessionTimerTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6BD3570ECEAFE505265F5E15 /* PhotoSessionTimer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E18E8412903D96A18B4F5C42 /* Build configuration list for PBXNativeTarget "PhotoSessionTimer" */;
+			buildPhases = (
+				FB7AD19293F5D951EE248072 /* Sources */,
+				307091301F88A45F7A828EEB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PhotoSessionTimer;
+			packageProductDependencies = (
+			);
+			productName = PhotoSessionTimer;
+			productReference = 339AB8913485680108E98B5E /* PhotoSessionTimer.app */;
+			productType = "com.apple.product-type.application";
+		};
+		926E358663EABF5664E50A2E /* PhotoSessionTimerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 46E109C8D8745DAF57F7FD50 /* Build configuration list for PBXNativeTarget "PhotoSessionTimerTests" */;
+			buildPhases = (
+				1487DF90A0671CCA4731AA3F /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PhotoSessionTimerTests;
+			packageProductDependencies = (
+			);
+			productName = PhotoSessionTimerTests;
+			productReference = 1C3D908185CF4F16744E5236 /* PhotoSessionTimerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1C4AC299E97303FF8C0E08F9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2650;
+				TargetAttributes = {
+					6BD3570ECEAFE505265F5E15 = {
+						DevelopmentTeam = T2AMLBZ6S6;
+						ProvisioningStyle = Automatic;
+					};
+					926E358663EABF5664E50A2E = {
+						DevelopmentTeam = T2AMLBZ6S6;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = BCA446AAF4EF384A0E6721D4 /* Build configuration list for PBXProject "PhotoSessionTimer" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = A0315977BA8F748A00E5ACB3;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 17F964B4B5EA9E23EE85844A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6BD3570ECEAFE505265F5E15 /* PhotoSessionTimer */,
+				926E358663EABF5664E50A2E /* PhotoSessionTimerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		307091301F88A45F7A828EEB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0065467CEC21EB193700412 /* Alarm.m4a in Resources */,
+				D471F76951458EA5C6A7D742 /* Assets.xcassets in Resources */,
+				BE6ED699B84C224C8BBC38BA /* Siren.m4a in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1487DF90A0671CCA4731AA3F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAD928073D7860F4316027F4 /* TimeFormatter.swift in Sources */,
+				9C7B8C1F25BD127C9FBBD78D /* TimeFormatterTests.swift in Sources */,
+				5D5A9F732891646C5999FF30 /* TimerEngine.swift in Sources */,
+				7BED9674E8FBB6E836EE609C /* TimerEngineTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB7AD19293F5D951EE248072 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				58201FEFBC74086B6ED397F5 /* ColorWell.swift in Sources */,
+				8C74D744BE14E750BCE8B334 /* MediaKeyMonitor.swift in Sources */,
+				AEF852E63B16D00B58530890 /* MenuBarView.swift in Sources */,
+				4F19FC407270AF64BAAADDE7 /* OverlayController.swift in Sources */,
+				FFD17A50D828D921544D76C2 /* OverlayView.swift in Sources */,
+				69F3A5C37351598BF0415790 /* PhotoSessionTimerApp.swift in Sources */,
+				7DB0BFD2C811DE062CD4EA97 /* TimeFormatter.swift in Sources */,
+				BE3063727A5DDD0FCE1E99F6 /* TimerEngine.swift in Sources */,
+				33FB75C74DC08FD60516B280 /* TimerPanel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5EC87D6C68CC5EB53D0C18BE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = T2AMLBZ6S6;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A2F9FF05587C4E1422B1ABEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ccwolfephoto.PhotoSessionTimerTests;
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+			};
+			name = Release;
+		};
+		BF4836E152218612DA19C851 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = T2AMLBZ6S6;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		D091C6393B762A5E466087BE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PhotoSessionTimer/PhotoSessionTimer.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 10;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = PhotoSessionTimer;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Michael Wild";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ccwolfephoto.PhotoSessionTimer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+			};
+			name = Debug;
+		};
+		E703ABF81E13AD2AEAD3D4DD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PhotoSessionTimer/PhotoSessionTimer.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 10;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = PhotoSessionTimer;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Michael Wild";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ccwolfephoto.PhotoSessionTimer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+			};
+			name = Release;
+		};
+		E8DBA8857E85B4715228A60C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ccwolfephoto.PhotoSessionTimerTests;
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		46E109C8D8745DAF57F7FD50 /* Build configuration list for PBXNativeTarget "PhotoSessionTimerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E8DBA8857E85B4715228A60C /* Debug */,
+				A2F9FF05587C4E1422B1ABEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BCA446AAF4EF384A0E6721D4 /* Build configuration list for PBXProject "PhotoSessionTimer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EC87D6C68CC5EB53D0C18BE /* Debug */,
+				BF4836E152218612DA19C851 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E18E8412903D96A18B4F5C42 /* Build configuration list for PBXNativeTarget "PhotoSessionTimer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D091C6393B762A5E466087BE /* Debug */,
+				E703ABF81E13AD2AEAD3D4DD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1C4AC299E97303FF8C0E08F9 /* Project object */;
+}

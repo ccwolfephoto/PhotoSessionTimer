@@ -47,11 +47,13 @@ struct TimeFormatterTests {
     /// fraction, so a value a hair under a whole second (13.0 computed as
     /// 12.9999999…) clamped to "12.99" instead of reading "13.00", and the
     /// seconds digit disagreed with the hundredths.
-    @Test("A hair under a whole second reads as that second", arguments: [
+    private static let floatingPointBoundaryCases: [(Double, Int, String)] = [
         (13.0 - 1e-9, 2, "0:13.00"), (13.0 - 1e-9, 1, "0:13.0"),
         (60.0 - 1e-9, 0, "1:00"), (3600.0 - 1e-9, 2, "1:00:00.00"),
         (0.1 + 0.2, 1, "0:00.3"), (0.7 + 0.1, 2, "0:00.80"),
-    ])
+    ]
+
+    @Test("A hair under a whole second reads as that second", arguments: floatingPointBoundaryCases)
     func floatingPointBoundary(value: Double, precision: Int, expected: String) {
         #expect(TimeFormatter.format(value, precision: precision) == expected)
     }

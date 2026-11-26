@@ -130,7 +130,7 @@ final class OverlayController: NSObject, ObservableObject, NSWindowDelegate {
 
     var window: NSPanel?
     private var lockWindow: NSPanel?
-    private let settingsKey = "TimeStack.overlay.v1"
+    private let settingsKey = "PhotoSessionTimer.overlay.v1"
 
     // MARK: - Init
 

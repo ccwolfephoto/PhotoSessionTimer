@@ -145,8 +145,8 @@ final class TimerEngine: ObservableObject {
     /// 50ms tick — fast enough for smooth hundredths display.
     private let displayInterval: TimeInterval = 0.05
 
-    private let settingsKey = "TimeStack.settings.v2"
-    private let legacyKeyV1 = "TimeStack.settings.v1"
+    private let settingsKey = "PhotoSessionTimer.settings.v2"
+    private let legacyKeyV1 = "PhotoSessionTimer.settings.v1"
 
     private let defaults: UserDefaults
     private let now: () -> Date
@@ -172,8 +172,8 @@ final class TimerEngine: ObservableObject {
         self.now = now
         let dict = TimerEngine.loadSettingsDict(
             from: defaults,
-            v2Key: "TimeStack.settings.v2",
-            v1Key: "TimeStack.settings.v1"
+            v2Key: "PhotoSessionTimer.settings.v2",
+            v1Key: "PhotoSessionTimer.settings.v1"
         )
 
         let target = (dict["countdownTarget"] as? TimeInterval) ?? 180
