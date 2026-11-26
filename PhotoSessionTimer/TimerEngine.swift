@@ -60,6 +60,19 @@ final class TimerEngine: ObservableObject {
         didSet { saveSettings() }
     }
 
+    /// Number of seconds by which to count (not yet wired to any behavior —
+    /// setting is accepted/persisted now, consumed by a future feature).
+    /// Clamped to a minimum of 1, following the same re-entrant-didSet guard
+    /// pattern as `delaySeconds` below (assigning inside didSet re-triggers
+    /// it, so we only recurse once to correct an out-of-range value).
+    @Published var increment: Int {
+        didSet {
+            let clamped = max(1, increment)
+            if clamped != increment { increment = clamped; return }
+            saveSettings()
+        }
+    }
+
     // MARK: - Custom user-picked sound (v1.1)
 
     /// Display name of the user-picked custom sound file (e.g. "beep.wav").
@@ -148,6 +161,48 @@ final class TimerEngine: ObservableObject {
         didSet { syncDisplayLoop() }
     }
 
+    // MARK: - Increment-quantized display values
+
+    /// Countdown time as it should be DISPLAYED, not the real time left.
+    /// When `increment` > 1, the overlay/menu only ever show multiples of
+    /// it — ticking internally every 50ms as usual (so completion and the
+    /// end sound still fire at the real zero), but visually holding at the
+    /// next-higher multiple until the real remaining time reaches it. e.g.
+    /// increment = 10 on a 3:00 countdown shows 3:00 the whole time the
+    /// real remaining is in (2:50, 3:00], then jumps to 2:50 once remaining
+    /// actually reaches 2:50, etc. — "ceiling to the increment".
+    var displayedCountdownRemaining: TimeInterval {
+        TimerEngine.quantizeCountdown(countdownRemaining, increment: increment)
+    }
+
+    /// Stopwatch counterpart of `displayedCountdownRemaining`: since
+    /// elapsed time counts UP, the display instead holds at the
+    /// next-LOWER multiple until the real elapsed time reaches it — e.g.
+    /// increment = 10 shows 0:00 while real elapsed is in [0, 10), then
+    /// jumps to 0:10, etc. — "floor to the increment".
+    var displayedStopwatchElapsed: TimeInterval {
+        TimerEngine.quantizeStopwatch(stopwatchElapsed, increment: increment)
+    }
+
+    /// Pure, pinned by tests: ceiling-quantizes `remaining` to the nearest
+    /// multiple of `increment` seconds. `increment` ≤ 1 is a no-op (every
+    /// whole second is its own "increment").
+    nonisolated static func quantizeCountdown(_ remaining: TimeInterval, increment: Int) -> TimeInterval {
+        guard increment > 1 else { return remaining }
+        let inc = Double(increment)
+        let clamped = max(0, remaining)
+        return (clamped / inc).rounded(.up) * inc
+    }
+
+    /// Pure, pinned by tests: floor-quantizes `elapsed` to the nearest
+    /// multiple of `increment` seconds. `increment` ≤ 1 is a no-op.
+    nonisolated static func quantizeStopwatch(_ elapsed: TimeInterval, increment: Int) -> TimeInterval {
+        guard increment > 1 else { return elapsed }
+        let inc = Double(increment)
+        let clamped = max(0, elapsed)
+        return (clamped / inc).rounded(.down) * inc
+    }
+
     // MARK: - Internal tracking
 
     private var countdownStartedAt: Date?
@@ -216,6 +271,7 @@ final class TimerEngine: ObservableObject {
         self.delayTickEnabled = (dict["delayTickEnabled"] as? Bool) ?? false
         self.showRunIndicator = (dict["showRunIndicator"] as? Bool) ?? true
         self.blinkRunIndicator = (dict["blinkRunIndicator"] as? Bool) ?? true
+        self.increment = max(1, (dict["increment"] as? Int) ?? 1)
         self.customSoundFileName = dict["customSoundFileName"] as? String
         self.customSoundBookmark = dict["customSoundBookmark"] as? Data
         self.soundPlayCount = max(1, (dict["soundPlayCount"] as? Int) ?? TimerEngine.defaultSoundPlayCount)
@@ -411,6 +467,7 @@ final class TimerEngine: ObservableObject {
         delayTickEnabled = false
         showRunIndicator = true
         blinkRunIndicator = true
+        increment = 1
         customSoundFileName = nil
         customSoundBookmark = nil
         soundPlayCount = TimerEngine.defaultSoundPlayCount
@@ -616,6 +673,7 @@ final class TimerEngine: ObservableObject {
             "soundPlayCount": soundPlayCount,
             "showRunIndicator": showRunIndicator,
             "blinkRunIndicator": blinkRunIndicator,
+            "increment": increment,
         ]
         // Custom-sound entries are conditional — when nil, omit the keys
         // entirely. The whole dict is replaced on each set, so cleared
