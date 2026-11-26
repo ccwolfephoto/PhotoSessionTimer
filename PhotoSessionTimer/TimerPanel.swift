@@ -81,11 +81,27 @@ struct TimerPanel: View {
     /// than a small badge. The glyph's own ascent/descent run a bit taller
     /// than monospaced digits at the same point size, so we dial the point
     /// size back slightly (0.85×) to land at roughly the same visual height.
+    /// While running, the ▶ blinks on 1s/off 1s — `TimelineView` drives
+    /// the redraw off wall-clock time (no `@State`/`Timer` bookkeeping needed),
+    /// so it stays in sync even if the view is recreated. The stopped ■ is
+    /// static — blinking only reads as meaningful on the "live" state.
     private var runStateIndicator: some View {
-        Text(isRunning ? "▶" : "■")
-            .font(.system(size: fontSize * 0.85, weight: .medium))
-            .foregroundStyle(isRunning ? tint : .secondary.opacity(0.5))
-            .accessibilityHidden(true)
+        Group {
+            if isRunning {
+                TimelineView(.periodic(from: .now, by: 1.0)) { context in
+                    let secondTick = Int(context.date.timeIntervalSinceReferenceDate)
+                    Text("▶")
+                        .font(.system(size: fontSize * 0.85, weight: .medium))
+                        .foregroundStyle(tint)
+                        .opacity(secondTick.isMultiple(of: 2) ? 1 : 0)
+                }
+            } else {
+                Text("■")
+                    .font(.system(size: fontSize * 0.85, weight: .medium))
+                    .foregroundStyle(.secondary.opacity(0.5))
+            }
+        }
+        .accessibilityHidden(true)
     }
 
     /// Card background flips between a light and dark tint based on the text
