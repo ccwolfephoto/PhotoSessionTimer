@@ -60,8 +60,9 @@ final class TimerEngine: ObservableObject {
         didSet { saveSettings() }
     }
 
-    /// Number of seconds by which to count (not yet wired to any behavior —
-    /// setting is accepted/persisted now, consumed by a future feature).
+    /// Number of seconds by which to count: the countdown/stopwatch displays
+    /// only ever show multiples of this value (see `displayedCountdownRemaining`
+    /// / `displayedStopwatchElapsed`), ticking internally every 50ms as usual.
     /// Clamped to a minimum of 1, following the same re-entrant-didSet guard
     /// pattern as `delaySeconds` below (assigning inside didSet re-triggers
     /// it, so we only recurse once to correct an out-of-range value).
@@ -72,6 +73,58 @@ final class TimerEngine: ObservableObject {
             saveSettings()
         }
     }
+
+    // MARK: - User-configurable state (v1.4) — alert at a chosen time remaining
+
+    /// Whether the second, time-targeted alert sound is armed at all.
+    @Published var secondSoundEnabled: Bool {
+        didSet { saveSettings() }
+    }
+    /// Countdown remaining (seconds) at which to fire the second sound —
+    /// e.g. 60 fires it the moment the countdown reads 1:00 remaining.
+    /// Clamped non-negative, same re-entrant-didSet guard as `delaySeconds`.
+    @Published var secondSoundTriggerSeconds: TimeInterval {
+        didSet {
+            let clamped = max(0, secondSoundTriggerSeconds)
+            if clamped != secondSoundTriggerSeconds { secondSoundTriggerSeconds = clamped; return }
+            saveSettings()
+        }
+    }
+    /// Same catalog/semantics as `countdownEndSound` ("None", bundled tags,
+    /// system sound name, or `customSoundTag`) — kept as an independent
+    /// setting so the two alerts can use different sounds.
+    @Published var secondSoundName: String {
+        didSet { saveSettings() }
+    }
+    /// Independent repeat count for the second sound, same semantics as
+    /// `soundPlayCount`.
+    @Published var secondSoundPlayCount: Int {
+        didSet { saveSettings() }
+    }
+    /// Soft Tink on each of the 3 whole seconds leading up to the trigger
+    /// time (mirrors `delayTickEnabled`'s 3-2-1 anticipation cue), so e.g.
+    /// with a 1:00 trigger it ticks at 1:03, 1:02, 1:01 remaining.
+    @Published var secondSoundTickEnabled: Bool {
+        didSet { saveSettings() }
+    }
+
+    /// Display name of the second alert's user-picked custom sound file.
+    /// Independent from the primary `customSoundFileName` so the two
+    /// alerts can each point at a different custom file.
+    @Published private(set) var secondCustomSoundFileName: String?
+    private var secondCustomSoundBookmark: Data?
+
+    /// True once the second sound has fired for the current run past the
+    /// trigger point — reset automatically the moment remaining rises back
+    /// above the trigger (fresh countdown, reset, resume, or a manual time
+    /// addition), so the alert is armed again for the next pass through it.
+    /// Internal, not private, so tests can observe the latch/reset edges
+    /// without needing to assert on actual NSSound playback.
+    private(set) var secondSoundFired = false
+    /// Last whole second (ceiling) the second-sound tick logic has already
+    /// considered, so the 50ms display loop doesn't replay the same tick
+    /// several times within one real second. Not persisted.
+    private var lastSecondSoundTickWholeSecond: Int?
 
     // MARK: - Custom user-picked sound (v1.1)
 
@@ -122,6 +175,13 @@ final class TimerEngine: ObservableObject {
     /// `weak`, so without our strong ref the delegate would deallocate
     /// after its enclosing scope ends and replay would never fire.
     private var soundReplayDelegate: SoundReplayDelegate?
+
+    /// Second alert's counterpart to `currentSound`/`soundReplayDelegate` —
+    /// kept entirely separate so the two alerts can overlap/chain
+    /// independently (e.g. the second alert at 1:00 remaining and the
+    /// primary end sound at 0:00 don't fight over the same references).
+    private var secondCurrentSound: NSSound?
+    private var secondSoundReplayDelegate: SoundReplayDelegate?
 
     // MARK: - User-configurable state (v0.3)
 
@@ -272,6 +332,13 @@ final class TimerEngine: ObservableObject {
         self.showRunIndicator = (dict["showRunIndicator"] as? Bool) ?? true
         self.blinkRunIndicator = (dict["blinkRunIndicator"] as? Bool) ?? true
         self.increment = max(1, (dict["increment"] as? Int) ?? 1)
+        self.secondSoundEnabled = (dict["secondSoundEnabled"] as? Bool) ?? false
+        self.secondSoundTriggerSeconds = max(0, (dict["secondSoundTriggerSeconds"] as? TimeInterval) ?? 60)
+        self.secondSoundName = (dict["secondSoundName"] as? String) ?? "None"
+        self.secondSoundPlayCount = max(1, (dict["secondSoundPlayCount"] as? Int) ?? TimerEngine.defaultSoundPlayCount)
+        self.secondSoundTickEnabled = (dict["secondSoundTickEnabled"] as? Bool) ?? false
+        self.secondCustomSoundFileName = dict["secondCustomSoundFileName"] as? String
+        self.secondCustomSoundBookmark = dict["secondCustomSoundBookmark"] as? Data
         self.customSoundFileName = dict["customSoundFileName"] as? String
         self.customSoundBookmark = dict["customSoundBookmark"] as? Data
         self.soundPlayCount = max(1, (dict["soundPlayCount"] as? Int) ?? TimerEngine.defaultSoundPlayCount)
@@ -317,6 +384,8 @@ final class TimerEngine: ObservableObject {
         countdownRunning = false
         countdownPausedRemaining = countdownTarget
         countdownRemaining = countdownTarget
+        secondSoundFired = false
+        lastSecondSoundTickWholeSecond = nil
     }
 
     /// Adds `seconds` to the countdown's time remaining, whether it's
@@ -435,6 +504,12 @@ final class TimerEngine: ObservableObject {
         playEndSound()
     }
 
+    /// Previews the second (time-targeted) alert sound, for its own Test
+    /// button in the menu.
+    func previewSecondSound() {
+        playSecondSound()
+    }
+
     // MARK: - Reset to defaults
 
     /// Wipes persisted settings and restores all user-configurable state to
@@ -471,6 +546,15 @@ final class TimerEngine: ObservableObject {
         customSoundFileName = nil
         customSoundBookmark = nil
         soundPlayCount = TimerEngine.defaultSoundPlayCount
+        secondSoundEnabled = false
+        secondSoundTriggerSeconds = 60
+        secondSoundName = "None"
+        secondSoundPlayCount = TimerEngine.defaultSoundPlayCount
+        secondSoundTickEnabled = false
+        secondCustomSoundFileName = nil
+        secondCustomSoundBookmark = nil
+        secondSoundFired = false
+        lastSecondSoundTickWholeSecond = nil
         saveSettings()
     }
 
@@ -492,6 +576,23 @@ final class TimerEngine: ObservableObject {
         customSoundFileName = nil
         if countdownEndSound == TimerEngine.customSoundTag {
             countdownEndSound = TimerEngine.defaultCountdownEndSound
+        }
+        saveSettings()
+    }
+
+    /// Second alert's counterpart to `setCustomSound`/`clearCustomSound`.
+    func setSecondCustomSound(bookmark: Data, fileName: String) {
+        secondCustomSoundBookmark = bookmark
+        secondCustomSoundFileName = fileName
+        secondSoundName = TimerEngine.customSoundTag
+        saveSettings()
+    }
+
+    func clearSecondCustomSound() {
+        secondCustomSoundBookmark = nil
+        secondCustomSoundFileName = nil
+        if secondSoundName == TimerEngine.customSoundTag {
+            secondSoundName = "None"
         }
         saveSettings()
     }
@@ -558,6 +659,61 @@ final class TimerEngine: ObservableObject {
         guard let url = Bundle.main.url(forResource: name, withExtension: ext) else { return nil }
         return NSSound(contentsOf: url, byReference: false)
     }
+
+    /// Second alert's counterpart to `playEndSound()` — same catalog/replay
+    /// logic, entirely independent sound/delegate references and settings
+    /// so the two alerts can fire back-to-back without interfering.
+    private func playSecondSound() {
+        guard secondSoundName != "None" else { return }
+
+        secondCurrentSound?.stop()
+        secondCurrentSound = nil
+        secondSoundReplayDelegate = nil
+
+        let sound: NSSound?
+        switch secondSoundName {
+        case TimerEngine.customSoundTag:
+            sound = loadSecondCustomSound()
+        case TimerEngine.bundledAlarmTag:
+            sound = loadBundledSound(named: "Alarm", ext: "m4a")
+        case TimerEngine.bundledSirenTag:
+            sound = loadBundledSound(named: "Siren", ext: "m4a")
+        default:
+            sound = NSSound(named: secondSoundName)
+        }
+        guard let s = sound else { return }
+
+        let count = max(1, secondSoundPlayCount)
+        if count > 1 {
+            let delegate = SoundReplayDelegate(remaining: count - 1) { [weak self] finished in
+                if self?.secondCurrentSound === finished {
+                    self?.secondCurrentSound = nil
+                    self?.secondSoundReplayDelegate = nil
+                }
+            }
+            secondSoundReplayDelegate = delegate
+            s.delegate = delegate
+        }
+        secondCurrentSound = s
+        s.play()
+    }
+
+    /// Second alert's counterpart to `loadCustomSound()`.
+    private func loadSecondCustomSound() -> NSSound? {
+        guard let bookmark = secondCustomSoundBookmark else { return nil }
+        var isStale = false
+        guard let url = try? URL(
+            resolvingBookmarkData: bookmark,
+            options: [.withSecurityScope],
+            relativeTo: nil,
+            bookmarkDataIsStale: &isStale
+        ) else { return nil }
+        guard url.startAccessingSecurityScopedResource() else { return nil }
+        defer { url.stopAccessingSecurityScopedResource() }
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        return NSSound(data: data)
+    }
+
 
     /// Soft Tink for each visible digit of the 3-2-1 delay countdown.
     /// Hardcoded sound choice — keeps v1.1 scope tight; picker can land in
@@ -641,6 +797,7 @@ final class TimerEngine: ObservableObject {
                 pausedRemaining: countdownPausedRemaining, startedAt: startedAt, now: date
             )
             countdownRemaining = max(0, remaining)
+            checkSecondSound(remaining: countdownRemaining)
             if remaining <= 0 {
                 countdownPausedRemaining = 0
                 countdownStartedAt = nil
@@ -653,6 +810,37 @@ final class TimerEngine: ObservableObject {
             stopwatchElapsed = TimerEngine.stopwatchTotal(
                 pausedElapsed: stopwatchPausedElapsed, startedAt: startedAt, now: date
             )
+        }
+    }
+
+    /// Edge-triggered check for the time-targeted second alert, run every
+    /// display-loop tick while the countdown is running. Two independent
+    /// behaviors, both keyed off `secondSoundTriggerSeconds`:
+    /// - The tick cue (if `secondSoundTickEnabled`) fires once per whole
+    ///   second for the 3 seconds leading up to the trigger.
+    /// - The alert itself fires once, the moment remaining first reaches
+    ///   (or has already passed, e.g. a coarse `increment`) the trigger —
+    ///   `secondSoundFired` latches so it won't repeat every tick while
+    ///   parked at/below the trigger, and un-latches automatically if
+    ///   remaining ever rises back above it (reset/resume/add time), so the
+    ///   next pass through the trigger fires again.
+    private func checkSecondSound(remaining: TimeInterval) {
+        if secondSoundEnabled, secondSoundTickEnabled {
+            let wholeSecond = Int(remaining.rounded(.up))
+            if wholeSecond != lastSecondSoundTickWholeSecond {
+                lastSecondSoundTickWholeSecond = wholeSecond
+                let secondsUntilTrigger = wholeSecond - Int(secondSoundTriggerSeconds.rounded())
+                if (1...3).contains(secondsUntilTrigger) {
+                    NSSound(named: "Tink")?.play()
+                }
+            }
+        }
+
+        if remaining > secondSoundTriggerSeconds {
+            secondSoundFired = false
+        } else if secondSoundEnabled, !secondSoundFired {
+            secondSoundFired = true
+            playSecondSound()
         }
     }
 
@@ -674,6 +862,11 @@ final class TimerEngine: ObservableObject {
             "showRunIndicator": showRunIndicator,
             "blinkRunIndicator": blinkRunIndicator,
             "increment": increment,
+            "secondSoundEnabled": secondSoundEnabled,
+            "secondSoundTriggerSeconds": secondSoundTriggerSeconds,
+            "secondSoundName": secondSoundName,
+            "secondSoundPlayCount": secondSoundPlayCount,
+            "secondSoundTickEnabled": secondSoundTickEnabled,
         ]
         // Custom-sound entries are conditional — when nil, omit the keys
         // entirely. The whole dict is replaced on each set, so cleared
@@ -683,6 +876,12 @@ final class TimerEngine: ObservableObject {
         }
         if let bookmark = customSoundBookmark {
             dict["customSoundBookmark"] = bookmark
+        }
+        if let fileName = secondCustomSoundFileName {
+            dict["secondCustomSoundFileName"] = fileName
+        }
+        if let bookmark = secondCustomSoundBookmark {
+            dict["secondCustomSoundBookmark"] = bookmark
         }
         defaults.set(dict, forKey: settingsKey)
     }

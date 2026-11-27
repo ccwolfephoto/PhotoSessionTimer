@@ -13,6 +13,10 @@ struct MenuBarView: View {
     /// losing focus) and parses to an Int ≥ 1.
     @State private var incrementText: String = ""
 
+    /// Local text buffer for the second alert's "Time" field (MM:SS), same
+    /// commit-on-submit pattern as `incrementText`.
+    @State private var secondSoundTimeText: String = ""
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             brandingHeader
@@ -28,6 +32,8 @@ struct MenuBarView: View {
             styleSection
             Divider()
             soundSection
+            Divider()
+            secondSoundSection
             Divider()
 
             Button("Reset to Defaults…") {
@@ -48,7 +54,10 @@ struct MenuBarView: View {
             .padding(.vertical, 6)
         }
         .frame(width: 280)
-        .onAppear { incrementText = String(engine.increment) }
+        .onAppear {
+            incrementText = String(engine.increment)
+            secondSoundTimeText = formatMinutesSeconds(engine.secondSoundTriggerSeconds)
+        }
     }
 
     private func confirmResetToDefaults() {
@@ -69,6 +78,8 @@ struct MenuBarView: View {
         engine.resetToDefaults()
         overlay.resetToDefaults()
         overlay.showWindow()
+        incrementText = String(engine.increment)
+        secondSoundTimeText = formatMinutesSeconds(engine.secondSoundTriggerSeconds)
     }
 
     // MARK: - Branding header
@@ -419,6 +430,170 @@ struct MenuBarView: View {
         } catch {
             // Bookmark creation failure is rare (typically only for files on
             // unsupported volumes). Silent in v1.1 — user can retry.
+        }
+    }
+
+    // MARK: - Alert at time remaining (second sound)
+
+    private var secondSoundSection: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            sectionHeader("Alert at Time")
+            Toggle("Play sound at time remaining", isOn: $engine.secondSoundEnabled)
+                .padding(.horizontal, 12)
+                .font(.caption)
+
+            HStack {
+                Text("Time")
+                    .foregroundStyle(.secondary)
+                Spacer()
+                // Not strictly validated beyond MM:SS parsing — invalid or
+                // empty text just snaps back to the last valid value on
+                // commit, same pattern as the Increment field.
+                TextField("", text: Binding(
+                    get: { secondSoundTimeText },
+                    set: { secondSoundTimeText = $0 }
+                ))
+                .textFieldStyle(.roundedBorder)
+                .multilineTextAlignment(.trailing)
+                .frame(width: 56)
+                .disabled(!engine.secondSoundEnabled)
+                .onSubmit { commitSecondSoundTime() }
+            }
+            .padding(.horizontal, 12)
+            .padding(.bottom, 4)
+            .font(.caption)
+
+            HStack {
+                Picker("", selection: $engine.secondSoundName) {
+                    Text("None").tag("None")
+                    Text("Alarm").tag(TimerEngine.bundledAlarmTag)
+                    Text("Siren").tag(TimerEngine.bundledSirenTag)
+                    Divider()
+                    ForEach(TimerEngine.availableSystemSounds, id: \.self) { name in
+                        Text(name).tag(name)
+                    }
+                    Divider()
+                    Text("Custom…").tag(TimerEngine.customSoundTag)
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .disabled(!engine.secondSoundEnabled)
+                .onChange(of: engine.secondSoundName) { newValue in
+                    if newValue == TimerEngine.customSoundTag,
+                       engine.secondCustomSoundFileName == nil {
+                        promptForSecondCustomSound()
+                    }
+                }
+
+                Button("Test") {
+                    engine.previewSecondSound()
+                }
+                .disabled(secondTestButtonDisabled)
+            }
+            .padding(.horizontal, 12)
+            .font(.caption)
+
+            HStack {
+                Text("Play")
+                    .foregroundStyle(.secondary)
+                Picker("", selection: $engine.secondSoundPlayCount) {
+                    Text("Once").tag(1)
+                    Text("3×").tag(3)
+                    Text("5×").tag(5)
+                    Text("10×").tag(10)
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .disabled(!engine.secondSoundEnabled || engine.secondSoundName == "None")
+                Spacer()
+            }
+            .padding(.horizontal, 12)
+            .font(.caption)
+
+            if engine.secondSoundName == TimerEngine.customSoundTag {
+                HStack(spacing: 6) {
+                    Text(engine.secondCustomSoundFileName ?? "(no file selected)")
+                        .lineLimit(1)
+                        .truncationMode(.middle)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Button("Choose…") { promptForSecondCustomSound() }
+                        .buttonStyle(.borderless)
+                }
+                .padding(.horizontal, 12)
+                .font(.caption)
+            }
+
+            Toggle("Tick for 3s before alert", isOn: $engine.secondSoundTickEnabled)
+                .padding(.horizontal, 12)
+                .padding(.bottom, 8)
+                .font(.caption)
+                .disabled(!engine.secondSoundEnabled)
+        }
+    }
+
+    private var secondTestButtonDisabled: Bool {
+        if !engine.secondSoundEnabled { return true }
+        if engine.secondSoundName == "None" { return true }
+        if engine.secondSoundName == TimerEngine.customSoundTag,
+           engine.secondCustomSoundFileName == nil { return true }
+        return false
+    }
+
+    /// Parses the field's commit into `engine.secondSoundTriggerSeconds`;
+    /// invalid/empty text is discarded and the field snaps back to the
+    /// last valid (persisted) value.
+    private func commitSecondSoundTime() {
+        if let parsed = parseMinutesSeconds(secondSoundTimeText) {
+            engine.secondSoundTriggerSeconds = parsed
+        }
+        secondSoundTimeText = formatMinutesSeconds(engine.secondSoundTriggerSeconds)
+    }
+
+    private func formatMinutesSeconds(_ interval: TimeInterval) -> String {
+        let total = Int(interval)
+        let minutes = total / 60
+        let seconds = total % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
+
+    private func parseMinutesSeconds(_ text: String) -> TimeInterval? {
+        let cleaned = text.trimmingCharacters(in: .whitespaces)
+        guard !cleaned.isEmpty else { return nil }
+        let parts = cleaned.split(separator: ":")
+        if parts.count == 2 {
+            guard let m = Int(parts[0]), let s = Int(parts[1]), m >= 0, s >= 0, s < 60 else { return nil }
+            return TimeInterval(m * 60 + s)
+        }
+        if parts.count == 1, let m = Int(cleaned), m >= 0 {
+            return TimeInterval(m * 60)
+        }
+        return nil
+    }
+
+    /// Second alert's counterpart to `promptForCustomSound()`.
+    private func promptForSecondCustomSound() {
+        let panel = NSOpenPanel()
+        panel.title = "Choose Sound"
+        panel.message = "Pick an audio file to play at the chosen time remaining."
+        panel.prompt = "Choose"
+        panel.allowedContentTypes = [UTType.audio]
+        panel.canChooseFiles = true
+        panel.canChooseDirectories = false
+        panel.allowsMultipleSelection = false
+
+        NSApp.activate(ignoringOtherApps: true)
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+
+        do {
+            let bookmark = try url.bookmarkData(
+                options: [.withSecurityScope, .securityScopeAllowOnlyReadAccess],
+                includingResourceValuesForKeys: nil,
+                relativeTo: nil
+            )
+            engine.setSecondCustomSound(bookmark: bookmark, fileName: url.lastPathComponent)
+        } catch {
+            // Bookmark creation failure is rare. Silent — user can retry.
         }
     }
 
