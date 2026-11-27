@@ -96,6 +96,69 @@ struct TimerEngineTests {
 
     // MARK: - The engine against the clock
 
+    @Test("The second alert latches once at the trigger and re-arms if remaining rises back above it")
+    func secondSoundAlertLatchesAndResets() {
+        let (engine, clock, _) = makeEngine()
+        engine.secondSoundEnabled = true
+        engine.secondSoundName = "None"  // latch logic is independent of which sound plays
+        engine.secondSoundTriggerSeconds = 50  // a 60s countdown, trigger at 10s elapsed
+
+        engine.startCountdown()
+        clock.advance(9)
+        engine.tick()
+        #expect(engine.countdownRemaining == 51)
+        #expect(!engine.secondSoundFired)  // still above the trigger
+
+        clock.advance(1)
+        engine.tick()
+        #expect(engine.countdownRemaining == 50)
+        #expect(engine.secondSoundFired)  // reached the trigger: latches
+
+        clock.advance(10)
+        engine.tick()
+        #expect(engine.countdownRemaining == 40)
+        #expect(engine.secondSoundFired)  // stays latched while below the trigger
+
+        // Adding time back above the trigger re-arms it for the next pass.
+        engine.addCountdownTime(20)
+        engine.tick()
+        #expect(engine.countdownRemaining == 60)
+        #expect(!engine.secondSoundFired)
+
+        clock.advance(10)
+        engine.tick()
+        #expect(engine.countdownRemaining == 50)
+        #expect(engine.secondSoundFired)  // fires again on the second pass
+    }
+
+    @Test("The second alert never latches while disabled")
+    func secondSoundAlertDisabled() {
+        let (engine, clock, _) = makeEngine()
+        engine.secondSoundEnabled = false
+        engine.secondSoundTriggerSeconds = 50
+
+        engine.startCountdown()
+        clock.advance(20)
+        engine.tick()
+        #expect(engine.countdownRemaining == 40)
+        #expect(!engine.secondSoundFired)
+    }
+
+    @Test("A countdown reset re-arms the second alert")
+    func secondSoundAlertResetsOnCountdownReset() {
+        let (engine, clock, _) = makeEngine()
+        engine.secondSoundEnabled = true
+        engine.secondSoundTriggerSeconds = 50
+
+        engine.startCountdown()
+        clock.advance(15)
+        engine.tick()
+        #expect(engine.secondSoundFired)
+
+        engine.resetCountdown()
+        #expect(!engine.secondSoundFired)
+    }
+
     @Test("Countdown runs, holds while paused, and resumes from where it stopped")
     func countdownPauseResume() {
         let (engine, clock, _) = makeEngine()
