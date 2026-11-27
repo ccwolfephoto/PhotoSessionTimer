@@ -1,29 +1,30 @@
 # PhotoSessionTimer
 
-Free, always-on-top transparent overlay timers for macOS. A stacked **countdown** and **stopwatch** that float above whatever app you're focused on — speedruns, focus sessions, time-boxed builds.
+An always-on-top timer for MacOS specialized for photographer use during minisessions when the laptop screen is being shown to the subject.
 
-## Status
+Based on the TimeStack app from PlanBeCreative, of which this is a divergent fork.  Thank you to the original authors.
 
-PhotoSessionTimer is a renamed fork of [TimeStack](https://github.com/planBe/TimeStack). The upstream README records its **v1.0** Mac App Store submission and notarized GitHub release on 2026-05-27; those distribution claims refer to TimeStack, not PhotoSessionTimer.
+My use case: I shoot tethered to my laptop with my screen mirrored to a monitor facing the subject.  My out-of-camera shots are displayed nearly full-screen.  each client gets a small, fixed amount of time in front of the camera - often 3 minutes.
 
-## Features
+I need to:
+ * show the subject the time remaining
+ * not distract the subject with a constantly changing timer (which would draw their eyes to the screen)
+ * control the timer using a hardware remote away from the laptop
+ * play a sound at a custom time prior to the end of the countdown (so I can stop and do review at the 2:00 mark, for example)
+ * display tighter formatting than TimeStack
 
-- ⏱ Stacked **countdown** + **stopwatch** running simultaneously — show either or both
-- 🎯 Configurable countdown target (default 20:00); click-to-edit the numbers in the overlay when stopped
-- 🪟 Always-on-top transparent overlay, works over any windowed app
-- 🔒 Click-through when locked; an always-clickable lock corner means you can lock or unlock without leaving the overlay
-- 📐 Resizable window with adjustable transparency; text scales with window size
-- 🎨 Per-timer text colors (NSColorPanel for true-color picking)
-- ⌚ Precision picker — whole seconds, tenths, or hundredths
-- ▶️ Both-at-once controls — Start Both starts a fresh run; the same button flips to Pause Both / Resume Both as state changes; Reset Both clears
-- 🔔 Countdown-end sound on by default — bundled **Alarm** (gentle bee-doo), **Siren** (Taiwan EAS-style wail), 14 macOS system sounds, or pick your own audio file
-- 🔁 Play sound Once (default) / 3× / 5× / 10× — any sound becomes alarm-like by repetition
-- 🚦 Optional 3-2-1 delay before any Start (0–10s, off by default; opt in via menu Stepper)
-- 🥁 Opt-in audio tick during the 3-2-1 delay
-- 💾 Window position/size, target time, colors, sound choice — all persist across launches
-- 🍎 Menu bar control (no dock icon)
-- 🆓 Free and open-source forever (MIT licensed)
-- 🪶 Lean: no runtime dependencies, pure SwiftUI + AppKit
+By modifying TimeStack, PhotoSessionTimer does all these things.
+
+## Features beyond TimeStack
+
+* Countdown timer main focus, stopwatch to be removed in future version
+* Media controls control countdown timer - Play-Pause starts/stops; prev-track adds 10 sec; next-track resets
+* Media control compatibility allows use of bluetooth media remotes (such as steering wheel media controllers) to control timer
+* Optional visual indicator when running; optionally blinks
+* Countdown by increment to prevent subject distraction - I like 5 seconds (use with running indicator)
+* Optionally play sound at time remaining
+* Assume less than 10 minutes for tighter formatting
+* Assume seconds precision (will remove precision option in future)
 
 ## Requirements
 
@@ -55,8 +56,8 @@ PhotoSessionTimer uses the bundle identifier `com.ccwolfephoto.PhotoSessionTimer
 
 ## Roadmap
 
-- [x] **Upstream v1.0** — initial TimeStack release. Full feature set above: overlay countdown + stopwatch, click-through lock with always-clickable lock corner, NSColorPanel per-timer colors, GeometryReader-driven font scaling, precision picker, click-to-edit countdown numbers, optional 3-2-1 delay-start with audio tick, both-at-once controls with Pause/Resume Both consolidation, bundled Alarm + Siren sounds plus 14 system sounds plus user-picked custom audio file, play-N-times count semantic, multi-monitor robust persistence
-- [ ] **v1.1+** — future candidates: in-app Credits surface, optional custom-sound trimming, additional bundled alarm options, configurable global hotkey to show/hide the overlay
+- [x] **TimeStack v1.0** — initial TimeStack release. Full feature set above: overlay countdown + stopwatch, click-through lock with always-clickable lock corner, NSColorPanel per-timer colors, GeometryReader-driven font scaling, precision picker, click-to-edit countdown numbers, optional 3-2-1 delay-start with audio tick, both-at-once controls with Pause/Resume Both consolidation, bundled Alarm + Siren sounds plus 14 system sounds plus user-picked custom audio file, play-N-times count semantic, multi-monitor robust persistence
+- [*] **PhotoSessionTimer v1.1** - Initial PhotoSessionTimer source release.
 
 ## Privacy
 
@@ -68,17 +69,14 @@ MIT. See [LICENSE](LICENSE).
 
 ## Credits
 
+- Based on [TimeStack](https://github.com/planBe/TimeStack) from PlanBeCreative, by Michael Wild, under the MIT License.
 - **Alarm** (bundled default sound) — generated programmatically; see [`gen_alarm.py`](gen_alarm.py).
 - **Siren** (bundled alternate sound, Taiwan EAS-style wail) — by [jeremayjimenez](https://pixabay.com/users/jeremayjimenez-28887262/) on Pixabay, used under the [Pixabay Content License](https://pixabay.com/service/license-summary/).
 
 ## Contributing
 
-Issues and PRs welcome. The codebase is intentionally compact — around 1800 lines of Swift across eight files — so it should be easy to dive in.
+Issues and PRs welcome.
 
 ## About
 
-Originally part of the **Stack** family of free, open-source macOS utilities as TimeStack. See also:
-
-- [ClipStack](https://github.com/planBe/ClipStack) — menu bar clipboard history
-
-Made by Michael Wild – plan Be creative.
+Maintained by [ccwolfephoto](https://www.ccwolfephoto.com)
